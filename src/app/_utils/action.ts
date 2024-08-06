@@ -12,7 +12,7 @@ export const A__GET__PaymentMethods = async () => {
                 message: "API Key is not provided."
             }
         }
-        const response = await fetch(`${BASEURL}/users/available-payment-methods/${APIKEY}`, {
+        const response = await fetch(`${BASEURL}/payment/methods`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

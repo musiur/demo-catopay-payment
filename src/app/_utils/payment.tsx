@@ -41,9 +41,9 @@ export default function Payment() {
       const methods = result.data.map((item: any) => {
         return {
           value: item?.id,
-          label: item?.numberOrAddress,
-          subLabel: item?.paymentMethod?.providerName,
-          image: item?.paymentMethod?.icon,
+          label: item?.providerName,
+          subLabel: item?.providerType,
+          image: item?.icon,
         };
       });
       setPaymentMethods(methods);
