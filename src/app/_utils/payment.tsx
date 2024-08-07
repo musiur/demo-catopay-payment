@@ -67,7 +67,13 @@ export default function Payment() {
       ...data,
       description: "Payment for services from DEMO App (NextJS/ReactJS)",
       redirect_url: "http://demo-catopay-payment.vercel.app",
-      callback_url: "__my_callback_url__", // our API endpoint
+      callback_url: "https://api.com", // our API endpoint
+      /**
+       *
+       * @param
+       * ?transactionId=asdfasdfa&status=success
+       *
+       */
     };
     const result = await A__POST__CreatePaymentRequest(payload);
     console.log(result);
