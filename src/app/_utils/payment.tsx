@@ -67,7 +67,8 @@ export default function Payment() {
       ...data,
       description: "Payment for services from DEMO App (NextJS/ReactJS)",
       redirect_url: "http://demo-catopay-payment.vercel.app",
-      callback_url: "https://api.com", // our API endpoint
+      callback_url: "https://2aa1-103-10-195-26.ngrok-free.app/webhook", // our API endpoint
+      note: "number=09123456789,name=john_doe,id=1234567890",
       /**
        *
        * @param
@@ -76,7 +77,6 @@ export default function Payment() {
        */
     };
     const result = await A__POST__CreatePaymentRequest(payload);
-    console.log(result);
     /**
      *
      * We have now a newly created payment request in the result;
