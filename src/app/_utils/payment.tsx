@@ -84,11 +84,15 @@ export default function Payment() {
      * lets visit Catopay payment site with request ID
      */
     if (typeof window !== "undefined" && result?.data?.id) {
-      window.location.href = `https://pay.catopay.com/payment?requestId=${result.data.id}`;
+      window.location.href = `https://pay.catopay.com/payment?requestId=${result.data.id}&numbers=+8801234567890,+8801234567891,+8801234567892`;
       setMessage(
         "We have successfully created a newly payment request. Let's complete the payment using CATOPAY. We are redirecting. Please wait..."
       );
+    } else {
+      setMessage("Failed to create payment request");
     }
+
+    setPending(false);
   }
 
   return (
