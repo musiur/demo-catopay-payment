@@ -14,6 +14,9 @@ import {
 } from "./action";
 import SubmitX from "@/components/molecules/submit.x";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 const FormSchema = z.object({
   amount: z.number().min(1),
@@ -139,6 +142,11 @@ export default function Payment() {
                 pending={form.formState.isSubmitting}
                 className="w-full"
               />
+              <div className="mt-4">
+                <Link href="/refund" className="w-full">
+                <Button variant="outline" className="w-full">Create Refund <ArrowUpRight className="w-4 h-4" /></Button>
+              </Link>
+              </div>
             </>
           )}
         </form>
