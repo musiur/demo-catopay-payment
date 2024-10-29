@@ -20,9 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ApiDialog />
         <Private>{children}</Private>
         <Toaster />
-        <ApiDialog />
       </body>
     </html>
   );

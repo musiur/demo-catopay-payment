@@ -17,6 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
   amount: z.number().min(1),
@@ -59,6 +60,8 @@ export default function Payment() {
         };
       });
       setPaymentMethods(methods);
+    } else {
+      toast.error(result?.message || "Failed to fetch payment methods");
     }
   };
 
@@ -97,21 +100,23 @@ export default function Payment() {
      * There is id in result.data.id (Payment Request ID);
      * lets visit Catopay payment site with request ID
      */
-    if (typeof window !== "undefined" && result?.data?.id) {
-      // window.location.href = `https://pay.catopay.com/payment?requestId=${result.data.id}&numbers=+8801234567890,+8801234567891,+8801234567892`;
-      window.location.href = `http://localhost:3001/payment?requestId=${result.data.id}&numbers=+8801234567890,+8801234567891,+8801234567892`;
+    
+    if (typeof window !== "undefined" && result?.data?.payment_url) {
+      window.location.href = `${result.data.payment_url}&numbers=+8801234567890,+8801234567891,+8801234567892`;
       setMessage(
         "We have successfully created a newly payment request. Let's complete the payment using CATOPAY. We are redirecting. Please wait..."
       );
     } else {
-      setMessage("Failed to create payment request");
+      const errorMessage = result?.message || "Failed to create payment request";
+      setMessage(errorMessage);
+      toast.error(errorMessage);
     }
 
     setPending(false);
   }
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-tr from-blue-600 to-indigo-800 py-12 px-4">
+    <div className="min-h-[100dvh] bg-gradient-to-tr from-blue-400 to-indigo-800 py-12 px-4">
       {message ? (
         <div className="min-w-[280px] max-w-[420px] mx-auto my-4 bg-white px-4 py-2 text-center rounded-lg">
           {message}

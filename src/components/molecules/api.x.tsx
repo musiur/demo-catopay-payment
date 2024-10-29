@@ -34,10 +34,10 @@ export default function ApiDialog() {
   return (
     <div
       className={clsx(
-        "w-full h-screen flex flex-col justify-center items-center gap-10",
+        "w-full py-2 flex flex-col justify-center items-center gap-10",
         {
-          block: open,
-          hidden: !open,
+          "h-screen": open,
+          "h-auto": !open,
         }
       )}
     >
@@ -53,11 +53,9 @@ export default function ApiDialog() {
           setOpen(apiKey?.length ? false : true);
         }}
       >
-        {open ? (
-          <DialogTrigger asChild>
-            <Button variant="outline">Get Started</Button>
-          </DialogTrigger>
-        ) : null}
+        <DialogTrigger asChild>
+          <Button>{!open ? "Re-enter API Key" : "Get Started"}</Button>
+        </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]" noClose={true}>
           <DialogHeader>
             <DialogTitle>Verification</DialogTitle>

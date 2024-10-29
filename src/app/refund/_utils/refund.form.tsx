@@ -12,6 +12,7 @@ import { createRefund } from "./actions";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { A__GET__PaymentMethods } from "@/app/_utils/action";
 
 const FormSchema = z.object({
   amount: z.number().min(1, { message: "Amount is required" }),
@@ -27,13 +28,35 @@ const FormSchema = z.object({
   bankNumberOrAddress: z.string().min(1),
 });
 
-const RefundForm = ({ methods }: { methods: any }) => {
+const RefundForm = () => {
   const [apiKey, setApiKey] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState([]);
+
+  const getData = async (apiKey: string) => {
+    const result = await A__GET__PaymentMethods(apiKey);
+    
+    if (result?.success) {
+      const methods = result.data.map((item: any) => {
+        return {
+          value: item?.id,
+          label: item?.providerName,
+          subLabel: item?.providerType,
+          image: item?.icon,
+        };
+      });
+      setPaymentMethods(methods);
+    } else {
+      toast.error(result?.message);
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const apiKeyOnLS = localStorage.getItem("api-modal-state");
-      apiKeyOnLS?.length && setApiKey(apiKeyOnLS || "");
+      if (apiKeyOnLS?.length) {
+        setApiKey(apiKeyOnLS || "");
+        apiKeyOnLS?.length && getData(apiKeyOnLS);
+      }
     }
   }, []);
 
@@ -55,6 +78,9 @@ const RefundForm = ({ methods }: { methods: any }) => {
     if (result?.success) {
       toast.success(result?.message);
       form.reset();
+      setTimeout(() => {
+        window.location.reload()
+      }, 4000);
     } else {
       toast.error(result?.message);
     }
@@ -79,10 +105,7 @@ const RefundForm = ({ methods }: { methods: any }) => {
             label="Payment Method"
             form={form}
             type="select"
-            options={methods.map((method: any) => ({
-              label: method.providerName,
-              value: method.id,
-            }))}
+            options={paymentMethods || []}
           />
           <InputX
             name="referenceTxnId"
@@ -107,7 +130,12 @@ const RefundForm = ({ methods }: { methods: any }) => {
             label="Bank Number or Address"
             form={form}
           />
-          <SubmitX text="Create Refund" pending={false} className="w-full"/>
+          <SubmitX
+            text="Create Refund"
+            pending={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting}
+            className="w-full"
+          />
           <Link
             href="/"
             className="pt-10 flex items-center justify-start gap-3"

@@ -4,7 +4,7 @@ const BASEURL = process.env.BASEURL;
 
 export const createRefund = async (data: any, apiKey: string) => {
     try {
-        console.log(apiKey)
+        
         const response = await fetch(`${BASEURL}/refund/create-a-request`, {
             method: "POST",
             headers: {
