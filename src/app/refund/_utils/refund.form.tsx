@@ -9,6 +9,9 @@ import InputX from "@/components/molecules/input.x";
 import SubmitX from "@/components/molecules/submit.x";
 import { toast } from "sonner";
 import { createRefund } from "./actions";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 const FormSchema = z.object({
   amount: z.number().min(1, { message: "Amount is required" }),
@@ -25,6 +28,15 @@ const FormSchema = z.object({
 });
 
 const RefundForm = ({ methods }: { methods: any }) => {
+  const [apiKey, setApiKey] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const apiKeyOnLS = localStorage.getItem("api-modal-state");
+      apiKeyOnLS?.length && setApiKey(apiKeyOnLS || "");
+    }
+  }, []);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -38,10 +50,14 @@ const RefundForm = ({ methods }: { methods: any }) => {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const result = await createRefund(data);
+    const result = await createRefund(data, apiKey);
 
-    toast(result?.message || "Refund not created!");
-    form.reset();
+    if (result?.success) {
+      toast.success(result?.message);
+      form.reset();
+    } else {
+      toast.error(result?.message);
+    }
   }
 
   return (
@@ -91,7 +107,13 @@ const RefundForm = ({ methods }: { methods: any }) => {
             label="Bank Number or Address"
             form={form}
           />
-          <SubmitX text="Create Refund" pending={false} />
+          <SubmitX text="Create Refund" pending={false} className="w-full"/>
+          <Link
+            href="/"
+            className="pt-10 flex items-center justify-start gap-3"
+          >
+            <ArrowUpRight className="w-4 h-4" /> Back to Create Payment Request
+          </Link>
         </form>
       </Form>
     </div>

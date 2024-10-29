@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import ApiDialog from "@/components/molecules/api.x";
+import Private from "@/components/molecules/private.x";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <Private>{children}</Private>
         <Toaster />
+        <ApiDialog />
       </body>
     </html>
   );

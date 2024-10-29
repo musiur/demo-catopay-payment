@@ -29,6 +29,15 @@ export default function Payment() {
   const [message, setMessage] = useState("");
   const params = useSearchParams();
 
+  const [apiKey, setApiKey] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const apiKeyOnLS = localStorage.getItem("api-modal-state") || "";
+      apiKeyOnLS?.length && setApiKey(apiKeyOnLS || "");
+    }
+  }, []);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -38,7 +47,7 @@ export default function Payment() {
   });
 
   const FetchMethodList = async () => {
-    const result = await A__GET__PaymentMethods();
+    const result = await A__GET__PaymentMethods(apiKey);
 
     if (result?.data?.length) {
       const methods = result.data.map((item: any) => {
@@ -54,8 +63,10 @@ export default function Payment() {
   };
 
   useEffect(() => {
-    !paymentMethods?.length ? FetchMethodList() : setPending(false);
-  }, [paymentMethods]);
+    !paymentMethods?.length && apiKey?.length
+      ? FetchMethodList()
+      : setPending(false);
+  }, [paymentMethods, apiKey]);
   useEffect(() => {
     if (params.has("paymentId")) {
       setMessage("Payment Successful!");
@@ -79,7 +90,7 @@ export default function Payment() {
        *
        */
     };
-    const result = await A__POST__CreatePaymentRequest(payload);
+    const result = await A__POST__CreatePaymentRequest(payload, apiKey);
     /**
      *
      * We have now a newly created payment request in the result;
@@ -144,8 +155,10 @@ export default function Payment() {
               />
               <div className="mt-4">
                 <Link href="/refund" className="w-full">
-                <Button variant="outline" className="w-full">Create Refund <ArrowUpRight className="w-4 h-4" /></Button>
-              </Link>
+                  <Button variant="outline" className="w-full gap-2">
+                  <ArrowUpRight className="w-4 h-4" /> Create Refund 
+                  </Button>
+                </Link>
               </div>
             </>
           )}

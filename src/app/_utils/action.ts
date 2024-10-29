@@ -1,12 +1,11 @@
 "use server";
 
 const BASEURL = process.env.BASEURL;
-const APIKEY = process.env.APIKEY;
 
 
-export const A__GET__PaymentMethods = async () => {
+export const A__GET__PaymentMethods = async (apiKey: string) => {
     try {
-        if (!APIKEY) {
+        if (!apiKey) {
             return {
                 success: false,
                 message: "API Key is not provided."
@@ -16,7 +15,7 @@ export const A__GET__PaymentMethods = async () => {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": APIKEY
+                "x-api-key": apiKey
             },
             cache: "no-store"
         })
@@ -36,9 +35,9 @@ export const A__POST__CreatePaymentRequest = async (data: {
     paymentMethodId: string,
     redirect_url: string,
     callback_url: string
-}) => {
+}, apiKey: string) => {
     try {
-        if (!APIKEY) {
+        if (!apiKey) {
             return {
                 success: false,
                 message: "API Key is not provided."
@@ -48,7 +47,7 @@ export const A__POST__CreatePaymentRequest = async (data: {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": APIKEY
+                "x-api-key": apiKey
             },
             body: JSON.stringify(data)
         })
