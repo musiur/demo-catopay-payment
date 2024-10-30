@@ -87,7 +87,7 @@ const RefundForm = () => {
   }
 
   return (
-    <div className="flex justify-center items-center w-full h-screen bg-primary">
+    <div className="flex justify-center items-center w-full min-h-[100dvh] bg-primary py-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
