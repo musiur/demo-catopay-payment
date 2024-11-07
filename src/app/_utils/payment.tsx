@@ -84,7 +84,7 @@ export default function Payment() {
       description: "Payment for services from DEMO App (NextJS/ReactJS)",
       redirect_url: "http://demo-catopay-payment.vercel.app",
       // redirect_url: "http://localhost:3000",
-      callback_url: "https://2aa1-103-10-195-26.ngrok-free.app/webhook", // our API endpoint
+      callback_url: "https://webhook.site/4504053f-9ad6-404e-8f49-4d5721e30354?username=john_doe&userid=1234567890", // our API endpoint
       note: "number=09123456789,name=john_doe,id=1234567890",
       /**
        *
