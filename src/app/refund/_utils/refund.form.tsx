@@ -26,6 +26,7 @@ const FormSchema = z.object({
     "MERCHANT_ACCOUNT",
   ]),
   bankNumberOrAddress: z.string().min(1),
+  callbackUrl: z.string().min(1),
 });
 
 const RefundForm = () => {
@@ -69,6 +70,7 @@ const RefundForm = () => {
       refundReason: "",
       accountType: "PERSONAL_ACCOUNT",
       bankNumberOrAddress: "",
+      callbackUrl: "",
     },
   });
 
@@ -128,6 +130,11 @@ const RefundForm = () => {
           <InputX
             name="bankNumberOrAddress"
             label="Bank Number or Address"
+            form={form}
+          />
+          <InputX
+            name="callbackUrl"
+            label="Callback URL"
             form={form}
           />
           <SubmitX
