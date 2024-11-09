@@ -22,6 +22,8 @@ import { toast } from "sonner";
 const FormSchema = z.object({
   amount: z.number().min(1),
   paymentMethodId: z.string().min(1),
+  callback_url: z.string().min(1),
+  redirect_url: z.string().min(1),
 });
 
 export default function Payment() {
@@ -44,6 +46,8 @@ export default function Payment() {
     defaultValues: {
       amount: 10,
       paymentMethodId: "",
+      callback_url: "",
+      redirect_url: "",
     },
   });
 
@@ -82,9 +86,6 @@ export default function Payment() {
     const payload = {
       ...data,
       description: "Payment for services from DEMO App (NextJS/ReactJS)",
-      redirect_url: "http://demo-catopay-payment.vercel.app",
-      // redirect_url: "http://localhost:3000",
-      callback_url: "https://webhook.site/4504053f-9ad6-404e-8f49-4d5721e30354?username=john_doe&userid=1234567890", // our API endpoint
       note: "number=09123456789,name=john_doe,id=1234567890",
       /**
        *
@@ -153,7 +154,9 @@ export default function Payment() {
                 label="Select Payment Method"
                 type="select"
                 options={paymentMethods || []}
-              />
+                />
+                <InputX form={form} name="callback_url" label="Callback URL" type="text" />
+                <InputX form={form} name="redirect_url" label="Redirect URL" type="text" />
               <SubmitX
                 pending={form.formState.isSubmitting}
                 className="w-full"
